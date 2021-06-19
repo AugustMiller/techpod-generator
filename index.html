@@ -75,20 +75,20 @@
 
         let currentTitleSize = 100;
 
-        const smaller = document.getElementById('smaller');
-        const bigger = document.getElementById('bigger');
-        const titleText = document.getElementById('title-text');
+        const $smaller = document.getElementById('smaller');
+        const $bigger = document.getElementById('bigger');
+        const $titleText = document.getElementById('title-text');
 
         const setTitleSize = (size = currentTitleSize) => {
-            titleText.style.fontSize = `${size}px`;
+            $titleText.style.fontSize = `${size}px`;
         };
 
-        smaller.addEventListener('click', (e) => {
+        $smaller.addEventListener('click', (e) => {
             currentTitleSize = Math.max(minTitleSize, currentTitleSize - 10);
             setTitleSize();
         });
 
-        bigger.addEventListener('click', (e) => {
+        $bigger.addEventListener('click', (e) => {
             currentTitleSize = Math.min(maxTitleSize, currentTitleSize + 10);
             setTitleSize();
         });
