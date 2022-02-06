@@ -44,7 +44,7 @@
         }
 
         .cover-art__lede {
-            color: #FCDA00;
+            color: rgb(246, 212, 11);
             font-family: 'futura-pt';
             font-size: 20px;
             font-weight: 400;
@@ -53,7 +53,7 @@
         }
 
         .cover-art__title {
-            color: #FCDA00;
+            color: rgb(246, 212, 11);
             font-family: 'futura-pt';
             font-size: 100px;
             font-weight: 700;
@@ -61,6 +61,12 @@
             margin: 0;
             text-transform: uppercase;
             text-shadow: 8px 8px 0 rgba(0, 0, 0, 0.6);
+            -webkit-text-stroke: 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .cover-art--theme-foss .cover-art__lede,
+        .cover-art--theme-foss .cover-art__title {
+            color: rgba(255, 163, 0);
         }
 
         .cover-art__banner {
@@ -158,7 +164,7 @@
                     checked
                     data-default-lede="Brad & Will Made a"
                     data-default-text="TECH POD.">
-                <span class="controls__control-label">Techpod</span>
+                <span class="controls__control-label">TECH.</span>
             </div>
             <div class="controls__control">
                 <input
@@ -168,7 +174,7 @@
                     value="foss"
                     data-default-lede="Brad & Will present a"
                     data-default-text="FOSS POD.">
-                <span class="controls__control-label">FOSS</span>
+                <span class="controls__control-label">FOSS.</span>
             </div>
         </div>
     </form>
