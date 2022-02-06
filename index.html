@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Techmod</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link rel="stylesheet" href="https://use.typekit.net/nal2djv.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap" rel="stylesheet"> 
 
     <style>
         * {
@@ -14,17 +19,28 @@
         }
 
         body {
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 40px;
         }
 
+        /* Art */
+
         .cover-art {
-            background-color: #70007C;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
             height: 450px;
             margin: 0 auto;
             padding: 60px 40px 40px 40px;
+            position: relative;
             width: 450px;
+        }
+
+        .cover-art--theme-tech {
+            background-color: #70007C;
+        }
+
+        .cover-art--theme-foss {
+            background-color: rgb(0, 42, 76);
         }
 
         .cover-art__lede {
@@ -47,36 +63,130 @@
             text-shadow: 8px 8px 0 rgba(0, 0, 0, 0.6);
         }
 
+        .cover-art__banner {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.15) 40%, rgba(255, 255, 255, 0) 100%);
+            bottom: 30px;
+            display: none;
+            left: 0;
+            padding: 8px 40px;
+            position: absolute;
+        }
+
+        .cover-art--theme-foss .cover-art__banner {
+            align-items: flex-end;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cover-art__banner-text {
+            color: white;
+            font-size: 14px;
+            font-weight: 100;
+        }
+
+        .cover-art__banner-image {
+            display: block;
+            max-width: 50%;
+        }
+
+        /* Controls */
+
         .controls {
+            margin: 2rem auto 0 auto;
+            width: 450px;
+        }
+
+        .controls__group {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: center;
-            margin: 20px auto 0 auto;
-            width: 200px;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .controls__group:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .controls__control {
+            display: flex;
+            margin: 0 1rem;
+        }
+
+        .controls__button {
+            appearance: none;
+            background: none;
+            border: 2px solid rgba(0, 0, 0, 0.9);
+            border-radius: 2px;
+            cursor: pointer;
+            font: inherit;
+            padding: 0.5em 1em;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
-    <div class="cover-art">
-        <h2 class="cover-art__lede" contenteditable spellcheck="false">Brad & Will Made a</h2>
+    <div class="cover-art" id="art">
+        <h2 class="cover-art__lede" id="lede-text" contenteditable spellcheck="false">Brad & Will Made a</h2>
         <h1 class="cover-art__title" id="title-text" contenteditable spellcheck="false">
             TECH
             POD.
         </h1>
+        <div class="cover-art__banner">
+            <div class="cover-art__banner-text" contenteditable>brought to you by</div>
+            <img class="cover-art__banner-image" src="img/os.png">
+        </div>
     </div>
 
-    <div class="controls">
-        <button id="smaller">Smaller Type</button>
-        <button id="bigger">Larger Type</button>
-    </div>
+    <form class="controls" id="configuration">
+        <div class="controls__group controls__group--type">
+            <div class="controls__control">
+                <button class="controls__button" id="smaller" type="button">Smaller Type</button>
+            </div>
+            <div class="controls__control">
+                <button class="controls__button" id="bigger" type="button">Larger Type</button>
+            </div>
+        </div>
+        <div class="controls__group controls__group--theme">
+            <div class="controls__control">
+                <input
+                    class="controls__radio"
+                    type="radio"
+                    name="theme"
+                    value="tech"
+                    checked
+                    data-default-lede="Brad & Will Made a"
+                    data-default-text="TECH POD.">
+                <span class="controls__control-label">Techpod</span>
+            </div>
+            <div class="controls__control">
+                <input
+                    class="controls__radio"
+                    type="radio"
+                    name="theme"
+                    value="foss"
+                    data-default-lede="Brad & Will present a"
+                    data-default-text="FOSS POD.">
+                <span class="controls__control-label">FOSS</span>
+            </div>
+        </div>
+    </form>
 
     <script>
+        const $art = document.getElementById('art');
+        const $configuration = document.getElementById('configuration');
+
         const minTitleSize = 40;
         const maxTitleSize = 120;
+
+        // Type Size
 
         let currentTitleSize = 100;
 
         const $smaller = document.getElementById('smaller');
         const $bigger = document.getElementById('bigger');
+        const $ledeText = document.getElementById('lede-text');
         const $titleText = document.getElementById('title-text');
 
         const setTitleSize = (size = currentTitleSize) => {
@@ -94,6 +204,26 @@
         });
 
         setTitleSize();
+
+        // Theme
+        const setTheme = (mode) => {
+            $art.classList.remove('cover-art--theme-tech', 'cover-art--theme-foss');
+
+            $art.classList.add(`cover-art--theme-${$configuration.elements.theme.value}`);
+
+            for (let $input of $configuration.elements.theme) {
+                if ($input.value !== mode) continue;
+
+                $ledeText.innerText = $input.dataset.defaultLede;
+                $titleText.innerText = $input.dataset.defaultText;
+            }
+        };
+
+        $configuration.addEventListener('change', (e) => {
+            setTheme($configuration.elements.theme.value);
+        });
+
+        $configuration.dispatchEvent(new Event('change'));
     </script>
 </body>
 </html>
